@@ -8,6 +8,9 @@ import FilePreview from './Pages/FilePreview'
 import {AuthProvider} from "./AuthContext";
 import Layout from "./Pages/Layout";
 import Files from "./Pages/Files";  
+import ShareDirectly from "./Pages/ShareDirectly";
+import SharedWithYou from "./Pages/SharedWithYou";
+import AccountsPage from "./Pages/AccountsPage";
 export default function App() {
     return (
             <BrowserRouter>
@@ -19,7 +22,9 @@ export default function App() {
                     <Route path="/file-upload" element={<FileUpload />} />
                     <Route path="/file-preview" element={<FilePreview />} />
                     <Route path="/files" element={<Files />} />
-                    <Route path="/account" element={<Login />} /> 
+                    <Route path="/account" element={<AccountsPage />} /> 
+                    <Route path="/share-direct" element={<ShareDirectly />} />
+                    <Route path="/shares" element={<SharedWithYou />} />
                 </Route>
                 </Routes>
             </BrowserRouter>

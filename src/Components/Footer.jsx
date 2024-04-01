@@ -11,10 +11,10 @@ const Footer = () => {
                 href="http://dsvasudev.netlify.app"
                 className="flex items-center"
               >
-                <img src="" className="h-8 me-3" alt="VD" />
-                <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
+                <img src="/Vasu Dev.png" className="h-48 me-3" alt="VD" />
+                {/* <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
                   Vasudev
-                </span>
+                </span> */}
               </a>
             </div>
             <div className="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
@@ -24,7 +24,7 @@ const Footer = () => {
                 </h2>
                 <ul className="text-gray-500 dark:text-gray-400 font-medium">
                   <li className="mb-4">
-                    <a href="https://github.com/dsvasudev19/file_share" className="hover:underline">
+                    <a href="https://github.com/dsvasudev19/FileSharingWebApplication_React" className="hover:underline">
                       GitHub
                     </a>
                   </li>
@@ -84,8 +84,8 @@ const Footer = () => {
           <div className="sm:flex sm:items-center sm:justify-between">
             <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400">
               © 2024{" "}
-              <a href="https://flowbite.com/" className="hover:underline">
-                ds.vasudev™
+              <a href="https://dsvasudev.netlify.app" className="hover:underline">
+                ds.vasudev
               </a>
               . All Rights Reserved.
             </span>

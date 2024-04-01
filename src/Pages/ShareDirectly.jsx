@@ -1,41 +1,49 @@
-import {Zap} from "lucide-react";
-import React, {useState} from "react";
-import toast, {Toaster} from "react-hot-toast";
-import {Formik, Form, Field, ErrorMessage} from "formik";
+import { Zap } from "lucide-react";
+import React, { useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
 const fileUploadValidationSchema = Yup.object({
-  file: Yup.mixed().required("File is Required"),
+    email: Yup.string()
+        .required("Email is Required"),
 });
 
-const initialValues = {
-  file: "",
-  password: "",
-};
 
-const FileUpload = () => {
+const ShareDirectly = () => {
   const [file, setFile] = useState(null);
   const [enablePassword, setEnablePassword] = useState(false);
   const [password, setPassword] = useState("");
+
+  const [initialValues, setInitialValues] = useState({
+    file: "",
+    password: "",
+    email: "",
+  });
   return (
     <div className="justify-center text-center p-3 mt-3">
       <div>
         <Toaster position="top-right" reverseOrder={false} />
       </div>
-      <div className="text-3xl font-bold mb-6">Upload Single File</div>
+      <div className="text-3xl font-bold mb-6">
+        <span className="text-blue-900 fw-bold">Upload</span> The file to be
+        Shared
+      </div>
       <Formik
         initialValues={initialValues}
-        onSubmit={async (values) => {
+        validationSchema={fileUploadValidationSchema}
+        onSubmit={async (values,{resetForm}) => {
           if (!file) {
             toast.error("Please select a file");
           } else if (enablePassword && !values.password) {
             toast.error("Please enter a password");
           } else {
-            console.log(values,"values")
-            let formData=new FormData();
-            formData.append("file",file);
-            formData.append("password",values.password);
-            
+            console.log(values, "values");
+            let formData = new FormData();
+            formData.append("file", file);
+            formData.append("password", values.password);
+            formData.append("email", values.email);
+
             const toastId = toast.loading("Uploading File...");
             setTimeout(() => {
               toast.success("File Uploaded Successfully", {
@@ -43,10 +51,11 @@ const FileUpload = () => {
               });
             }, 1000);
             setFile(null);
+            resetForm();
           }
         }}
       >
-        {({setFieldValue}) => (
+        {({ setFieldValue }) => (
           <Form>
             <div className="flex justify-center">
               <div className="flex items-center justify-center w-3/4">
@@ -72,7 +81,8 @@ const FileUpload = () => {
                     </svg>
                     <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
                       <span className="font-semibold">
-                        Click to <span className="text-blue-900 fw-bold">upload</span>
+                        Click to{" "}
+                        <span className="text-blue-900 fw-bold">upload</span>
                       </span>{" "}
                       or drag and drop
                     </p>
@@ -87,7 +97,7 @@ const FileUpload = () => {
                     onChange={(e) => {
                       setFile(e.target.files[0]);
                       console.log(e.target.files[0]);
-                      setFieldValue('file', e.target.files[0])
+                      setFieldValue("file", e.target.files[0]);
                     }}
                   />
                 </label>
@@ -96,9 +106,9 @@ const FileUpload = () => {
             {file && (
               <div className="flex justify-center">
                 <div className="flex justify-center mt-6 max-w-96 border-2 border-black p-5 rounded-lg">
-                  <div className="w-24 h-24 rounded-sm ">
+                  <div className="w-16 h-16 rounded-sm ">
                     <img
-                      src="/google-docs.png"
+                      src="./../../public/google-docs.png"
                       className="w-full h-full object-cover"
                       alt="file"
                     />
@@ -127,44 +137,77 @@ const FileUpload = () => {
                     }}
                   />
                   <label className="text-sm text-gray-500 dark:text-gray-400">
-                    <a href="#" className="text-blue-600 ml-2 text-md font-bold">
+                    <a
+                      href="#"
+                      className="text-blue-600 ml-2 text-md font-bold"
+                    >
                       {" "}
                       Enhance your file's Protection by providing a password
                     </a>
                   </label>
                 </div>
                 {enablePassword && (
-                  <div className="flex justify-center m-5">
-                    <Field
-                      name="password"
-                      type="password"
-                      placeholder="Password"
-                      className="border-2 border-gray-300 rounded-lg p-2 w-80"
-                      onChange={(e) => {
-                        setPassword(e.target.value);
-                        setFieldValue("password", e.target.value);
-                      }}
-                    />
+                  <div className="mt-3 flex justify-center">
+                    <label>
+                      
+                      <Field
+                        type="password"
+                        placeholder="Password"
+                        name="password"
+                        className="border-2 border-gray-300 rounded-lg p-2 w-80 ml-32"
+                        onChange={(e) => {
+                          setPassword(e.target.value);
+                          setFieldValue("password", e.target.value);
+                        }}
+                      />
+                      <ErrorMessage
+                        name="password"
+                        component="div"
+                        className="text-red-500"
+                      />
+                    </label>
                   </div>
                 )}
               </div>
             )}
+
+            <div className="mt-3">
+              <label>
+                <label className="text-lg text-black-500 dark:text-black-400">
+                  <span className="text-lg text-blue-900 fw-bold">
+                    Receiver
+                  </span>{" "}
+                  Email{"  "}
+                </label>
+                <Field
+                  type="email"
+                  name="email"
+                  placeholder="Receiver Email"
+                  className="border-2 border-gray-300 rounded-lg p-2 w-80 ml-2"
+                />
+                <ErrorMessage
+                  name="email"
+                  component="div"
+                  className="text-red-500"
+                />
+              </label>
+            </div>
+
             <div className="flex justify-center m-5">
               <button
                 class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800"
-                // disabled={!file}
                 type="submit"
-                // onClick={handleSubmit}
               >
                 <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
                   Upload
                 </span>
               </button>
             </div>
-          </Form>)}
+          </Form>
+        )}
       </Formik>
     </div>
   );
 };
 
-export default FileUpload;
+export default ShareDirectly;
