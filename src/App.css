@@ -6,11 +6,19 @@
   /* max-height: 100vh;
   overflow: scroll; */
   scroll-behavior: smooth;
+  /* max-height: 120vh; */
+  overflow: hidden;
 
 }
 #root::-webkit-scrollbar {
   display: none;
 }
+#mainContent::-webkit-scrollbar {
+  display: none;
+}
+
+
+
 .logo {
   height: 6em;
   padding: 1.5em;
