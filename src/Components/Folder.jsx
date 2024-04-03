@@ -9,7 +9,7 @@ const Folder = (props) => {
           <a >
               <img
                   class="rounded-t-lg"
-                  src="/public/folder.png"
+                  src="/folder.png"
                   alt=""
               />
           </a>
