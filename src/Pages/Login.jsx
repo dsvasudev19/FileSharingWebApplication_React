@@ -19,7 +19,6 @@ const Login = ({className}) => {
     try {
       console.log("values", values)
       await login(values);
-      navigate("/")
     } catch (error) {
       console.log(error);
     }

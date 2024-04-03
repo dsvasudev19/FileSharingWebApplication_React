@@ -15,6 +15,7 @@ export const AuthProvider= ({children}) => {
             const response = await axiosInstance.post("/api/auth/login", values);
             if (response.status === 200) {
                 setIsAuthenticated(true)
+                window.location.href="/"
             }
         } catch (error) {
             console.log(error)
@@ -80,9 +81,8 @@ export const AuthProvider= ({children}) => {
     };
 
     useEffect(() => {
-        if(isAuthenticated){
             checkAuthentication();
-        }
+        
     }, []);
 
     return (

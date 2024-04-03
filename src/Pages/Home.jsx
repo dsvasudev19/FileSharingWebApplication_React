@@ -8,7 +8,7 @@ const Home = () => {
   const {user,loading}=useAuth();
   const navigate=useNavigate();
   useEffect(()=>{
-    if(!loading && !user){
+    if (!user && !loading){
       navigate('/login')
     }
   })

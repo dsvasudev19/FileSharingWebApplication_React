@@ -10,10 +10,10 @@ const Files = (props) => {
     const navigate=useNavigate();
 
     useEffect(()=>{
-        if(!loading && !user) {
+        if (!user && !loading) {
             navigate('/login')
         }
-    },[])
+    },[user,loading])
     return (
         <div className='mt-3 border-2 border-slate-600 rounded-lg'>
             <h1 className='sm:text-lg md:text-xl lg:text-2xl xl:text-3xl m-5 '><span className='text-blue-700 font-bold'>Folder's</span> and <span className='text-blue-700 font-bold'>Files</span> Created By <span className='text-green-700 font-semibold'>You</span>❤️</h1>

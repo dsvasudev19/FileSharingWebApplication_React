@@ -19,7 +19,7 @@ const QuickAccess = (props) => {
     }, []);
 
     useEffect(() => {
-        if (!loading && !user) {
+        if (!user && !loading) {
             navigate('/login')
         }
 
