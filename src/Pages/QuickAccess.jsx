@@ -1,8 +1,9 @@
 import React from 'react';
 import File from './../Components/File';
 import {useState, useEffect} from 'react';
-import {useLocation} from 'react-router-dom';
+import { useAuth } from '../AuthContext';
 const QuickAccess = (props) => {
+    const {user}=useAuth();
 
     const [folderName, setFolderName] = useState("");
 
@@ -14,13 +15,20 @@ const QuickAccess = (props) => {
             setFolderName(folderType);
         }
     }, []);
-
+    
+    useEffect(() =>{
+        if(user){
+            console.log("user is alredy logged in")
+        }else{
+            console.log("user is not alredy logged in")
+        }
+    }, []);
 
     return (
         <div className='mt-5 border-2 border-slate-600 rounded-lg'>
             <h1 className='sm:text-lg md:text-xl lg:text-2xl xl:text-3xl m-5 font-bold'>Content's of {folderName} </h1>
             <h2 className='justify-start text-left ml-3 text-2xl font-bold'>Today</h2>
-            <div className='grid grid-flow-row grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 pr-3 pl-3 pb-3'>
+            <div className='grid grid-flow-row grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pr-3 pl-3 pb-3'>
                 {
                     Array.from({length: 5}).map((_, index) => (
                         <File />
@@ -29,7 +37,7 @@ const QuickAccess = (props) => {
                 }
             </div>
             <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700"></hr>
-            <div className='grid grid-flow-row grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 pr-3 pl-3 pb-3'>
+            <div className='grid grid-flow-row grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pr-3 pl-3 pb-3'>
                 {
                     Array.from({length: 5}).map((_, index) => (
                         <File />
@@ -38,7 +46,7 @@ const QuickAccess = (props) => {
                 }
             </div>
             <h2 className='justify-start text-left ml-3 text-2xl font-bold'>Earlier</h2>
-            <div className='grid grid-flow-row grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 pr-3 pl-3 pb-3'>
+            <div className='grid grid-flow-row grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pr-3 pl-3 pb-3'>
                 {
                     Array.from({length: 5}).map((_, index) => (
                         <File />

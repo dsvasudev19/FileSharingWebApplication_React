@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {axiosInstance} from './axiosInstance'
+import { axiosInstance } from "../axiosInstance";
 const AuthContext = React.createContext(undefined)
 
 
@@ -26,12 +26,11 @@ export const AuthProvider= ({children}) => {
         setUser(null);
         setIsAuthenticated(false)
 
-
     }
     const getUserByToken = async () => {
         try {
             setLoading(true);
-            const response = await axiosInstance.get("/api/auth/getUserByToken");
+            const response = await axiosInstance.get("/api/auth/getUser");
             if (response.status === 200) {
                 setUser(response.data.data);
                 console.log(response.data.data)
@@ -61,8 +60,10 @@ export const AuthProvider= ({children}) => {
     useEffect(() => {
         const checkAuthentication = async () => {
             try {
-                const response = await axiosInstance.get("/api/auth/check-auth");
-                setUser(response.data.user);
+                setLoading(true);
+                const response = await axiosInstance.get("/api/auth/getUser");
+                setUser(response.data.data);
+                console.log(response.data.data)
             } catch (error) {
                 setUser(null);
                 console.error(error);

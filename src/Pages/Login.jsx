@@ -1,7 +1,7 @@
 import React from "react";
 import {Formik, Field, Form, ErrorMessage} from "formik";
 import * as Yup from "yup";
-// import {useAuth} from "./../AuthContext";
+import {useAuth} from "./../AuthContext";
 
 const validationSchema = Yup.object({
   email: Yup.string()
@@ -11,11 +11,11 @@ const validationSchema = Yup.object({
 });
 
 const Login = ({className}) => {
-  // const {login} = useAuth();
+  const {login} = useAuth();
   const handleSubmit = async (values) => {
     try {
       console.log("values", values)
-      // await login(values);
+      await login(values);
     } catch (error) {
       console.log(error);
     }
