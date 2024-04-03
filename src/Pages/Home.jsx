@@ -5,7 +5,7 @@ import Footer from './../Components/Footer';
 import {Link} from 'react-router-dom';
 const Home = () => {
   return (
-    <div className='h-full border-2 border-blue-300 rounded-md p-5 mt-5'>
+    <div className='border-2 border-blue-500 rounded-md p-5 mt-5'>
       <div className='justify-center'>
         <h1 className='h-10 sm:text-lg md:text-xl lg:text-3xl rounded-full'>File <span className='text-blue-500'>Upload</span> and <span className='text-blue-500'>Transfer</span> made easier</h1>
       </div>
