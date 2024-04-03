@@ -15,6 +15,7 @@ import FolderContent from "./Pages/FolderContent";
 import QuickAccess from "./Pages/QuickAccess";
 export default function App() {
     return (
+        <AuthProvider>
             <BrowserRouter>
                 <Routes>
                 <Route path="/" element={<Layout />} >
@@ -32,5 +33,6 @@ export default function App() {
                 </Route>
                 </Routes>
             </BrowserRouter>
+        </AuthProvider>
     );
 }

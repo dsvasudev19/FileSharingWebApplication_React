@@ -10,9 +10,8 @@ const Files = (props) => {
     const navigate=useNavigate();
 
     useEffect(()=>{
-        if(!loading) {
-            console.log('not loading')
-            console.log(user)
+        if(!loading && !user) {
+            navigate('/login')
         }
     },[])
     return (

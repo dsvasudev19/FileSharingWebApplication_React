@@ -1,9 +1,17 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import SideBar from '../Components/SideBar';
 import {FileImage, FileMusic, FileVideo2, FolderHeart, Layers, Music2} from 'lucide-react';
 import Footer from './../Components/Footer';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
+import {useAuth} from './../AuthContext'
 const Home = () => {
+  const {user,loading}=useAuth();
+  const navigate=useNavigate();
+  useEffect(()=>{
+    if(!loading && !user){
+      navigate('/login')
+    }
+  })
   return (
     <div className='border-2 border-blue-500 rounded-md p-5 mt-5'>
       <div className='justify-center'>

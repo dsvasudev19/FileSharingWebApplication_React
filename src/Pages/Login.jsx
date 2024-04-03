@@ -1,7 +1,8 @@
-import React from "react";
+import React, {useState} from "react";
 import {Formik, Field, Form, ErrorMessage} from "formik";
 import * as Yup from "yup";
 import {useAuth} from "./../AuthContext";
+import {useNavigate} from "react-router-dom";
 
 const validationSchema = Yup.object({
   email: Yup.string()
@@ -11,11 +12,14 @@ const validationSchema = Yup.object({
 });
 
 const Login = ({className}) => {
+  const [loading,setLoading]=useState(false);
   const {login} = useAuth();
+  const navigate=useNavigate();
   const handleSubmit = async (values) => {
     try {
       console.log("values", values)
       await login(values);
+      navigate("/")
     } catch (error) {
       console.log(error);
     }
@@ -82,7 +86,7 @@ const Login = ({className}) => {
                   type="submit"
                   className="flex w-full justify-center rounded-md bg-blue-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                 >
-                  Sign in
+                  {!loading ? "Login":"Please Wait"}
                 </button>
               </div>
             </Form>

@@ -1,9 +1,11 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Button,Badge } from "flowbite-react";
 import * as Yup from "yup";
 import toast, { Toaster } from "react-hot-toast";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../AuthContext";
+
 const validationSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Email is Required"),
   first_name: Yup.string().required("First Name is Required"),
@@ -13,7 +15,9 @@ const validationSchema = Yup.object().shape({
   username: Yup.string().required("Username is Required"),
 });
 const AccountsPage = () => {
-    const [loading,setLoading]=useState(false)
+    const [formLoading,setFormLoading]=useState(false);
+    const {user,loading,logout} = useAuth();
+    const navigate=useNavigate();
   const initialValues = {
     first_name: "Darse Shikari",
     last_name: "Vasudev",
@@ -22,6 +26,13 @@ const AccountsPage = () => {
     email: "vasudevds1729@gmail.com",
     username: "vasudevds",
   };
+
+  useEffect(()=>{
+    if(!loading && !user){
+      navigate("/login");
+    }
+  },[user,loading])
+
   return (
     <div className="block lg:flex justify-center gap-4 mt-5">
       <Toaster position="top-right" reverseOrder={false} />
@@ -57,9 +68,12 @@ const AccountsPage = () => {
             </Button>
           </Link>
         </div>
+        
         <div className="h-[33%] w-full rounded-b-lg flex flex-col justify-end items-center">
           <div className="h-1/3 w-full flex justify-center items-center">
-            <Button outline gradientDuoTone="purpleToBlue">
+            <Button outline gradientDuoTone="purpleToBlue" onClick={()=>{
+              logout()
+            }}>
               Logout
             </Button>
           </div>
@@ -74,9 +88,9 @@ const AccountsPage = () => {
           validationSchema={validationSchema}
           onSubmit={(values, { resetForm }) => {
             console.log(values, "values");
-            setLoading(true);
+            setFormLoading(true);
             setTimeout(() => {
-              setLoading(false);
+              setFormLoading(false);
             }, 1000);
             toast.success("Account Updated Successfully");
           }}
@@ -169,7 +183,7 @@ const AccountsPage = () => {
               </div>
               <div className="flex justify-center">
                 <Button outline gradientDuoTone="greenToBlue" type="submit">
-                  {!loading ? "Save Changes" : "Saving Changes..."}
+                  {!formLoading ? "Save Changes" : "Saving Changes..."}
                 </Button>
               </div>
             </Form>

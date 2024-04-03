@@ -1,10 +1,12 @@
 import React from 'react';
 import File from './../Components/File';
 import {useState, useEffect} from 'react';
-import { useAuth } from '../AuthContext';
-const QuickAccess = (props) => {
-    const {user}=useAuth();
+import {useAuth} from '../AuthContext';
+import {useNavigate} from 'react-router-dom';
 
+const QuickAccess = (props) => {
+    const {user, loading} = useAuth();
+    const navigate = useNavigate();
     const [folderName, setFolderName] = useState("");
 
     useEffect(() => {
@@ -15,14 +17,13 @@ const QuickAccess = (props) => {
             setFolderName(folderType);
         }
     }, []);
-    
-    useEffect(() =>{
-        if(user){
-            console.log("user is alredy logged in")
-        }else{
-            console.log("user is not alredy logged in")
+
+    useEffect(() => {
+        if (!loading && !user) {
+            navigate('/login')
         }
-    }, []);
+
+    }, [user, loading]);
 
     return (
         <div className='mt-5 border-2 border-slate-600 rounded-lg'>

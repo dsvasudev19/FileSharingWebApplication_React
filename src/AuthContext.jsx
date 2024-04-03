@@ -1,35 +1,43 @@
 import React, {useEffect, useState} from "react";
 import { axiosInstance } from "../axiosInstance";
+import axios from "axios";
+import {useNavigate} from "react-router-dom";
 const AuthContext = React.createContext(undefined)
 
 
 export const AuthProvider= ({children}) => {
     const [isAuthenticated, setIsAuthenticated] = React.useState(false)
     const [user, setUser] = React.useState(null)
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const login = async (values) => {
         console.log("getting here")
         try {
-            setLoading(true);
             const response = await axiosInstance.post("/api/auth/login", values);
             if (response.status === 200) {
                 setIsAuthenticated(true)
             }
         } catch (error) {
             console.log(error)
-        } finally {
-            setLoading(false)
+            throw new Error(error);
         }
     }
 
-    const logout = () => {
-        setUser(null);
-        setIsAuthenticated(false)
-
+    const logout = async () => {
+        try {
+            const response=await axiosInstance.get("/api/auth/logout");
+            if (response.status === 200) {
+                setIsAuthenticated(false);
+                setUser(null);
+                window.location.href = "/login";
+            }
+        } catch (error) {
+            console.log(error);
+            setUser(null)
+            throw new Error(error);
+        }
     }
     const getUserByToken = async () => {
         try {
-            setLoading(true);
             const response = await axiosInstance.get("/api/auth/getUser");
             if (response.status === 200) {
                 setUser(response.data.data);
@@ -37,47 +45,49 @@ export const AuthProvider= ({children}) => {
             }
         } catch (error) {
             console.log(error);
+            throw new Error(error);
         } finally {
-            setLoading(false)
+            
         }
     }
 
     const signup = async (values) => {
         try {
-            setLoading(true);
             const response = await axiosInstance.post("/api/auth/register", values);
             if (response.status === 200) {
                 console.log(response.data);
-
             }
         }
         catch (error) {
             console.log(error);
+            throw new Error(error);
         } finally {
-            setLoading(false)
+            
         }
     }
-    useEffect(() => {
-        const checkAuthentication = async () => {
-            try {
-                setLoading(true);
-                const response = await axiosInstance.get("/api/auth/getUser");
-                setUser(response.data.data);
-                console.log(response.data.data)
-            } catch (error) {
-                setUser(null);
-                console.error(error);
-            } finally {
-                setLoading(false);
-            }
-        };
+    const checkAuthentication = async () => {
+        try {
+            const response = await axiosInstance.get("/api/auth/getUser");
+            setUser(response.data.data);
+            console.log(response.data.data)
+        } catch (error) {
+            setUser(null);
+            console.error(error);
+            throw new Error(error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
-        checkAuthentication();
+    useEffect(() => {
+        if(isAuthenticated){
+            checkAuthentication();
+        }
     }, []);
 
     return (
         <AuthContext.Provider
-            value={{isAuthenticated, login, logout, signup, user, getUserByToken, loading}}
+            value={{ login, logout, signup, user, loading,isAuthenticated}}
         >
             {children}
         </AuthContext.Provider>
