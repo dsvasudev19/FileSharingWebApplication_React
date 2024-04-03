@@ -5,7 +5,9 @@ import FileShareModal from "../Modals/FileShareModal";
 
 const File = (props) => {
   const [open, setOpen] = useState(false);
-
+  const closeModal = () => {
+    setOpen(false);
+  }
   return (
     <div class="max-w-xs bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mt-3">
       <a href="#">
@@ -33,7 +35,7 @@ const File = (props) => {
           >
             <Dropdown.Item>Edit</Dropdown.Item>
             <Dropdown.Item>Delete</Dropdown.Item>
-            <Dropdown.Item>Share</Dropdown.Item>
+            <Dropdown.Item>Download</Dropdown.Item>
             <Dropdown.Item>
               <button
                 onClick={() => {
@@ -47,7 +49,7 @@ const File = (props) => {
           </Dropdown>
         </a>
       </div>
-      {open && <FileShareModal isOpen={open} fileId={"FILE123"}/>}
+      {open && <FileShareModal isOpen={open} fileId={"FILE123"} closeModal={closeModal}/>}
     </div>
   );
 };

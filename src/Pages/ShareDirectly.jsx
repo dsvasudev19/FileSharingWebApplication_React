@@ -149,12 +149,11 @@ const ShareDirectly = () => {
                 {enablePassword && (
                   <div className="mt-3 flex justify-center">
                     <label>
-                      
                       <Field
                         type="password"
                         placeholder="Password"
                         name="password"
-                        className="border-2 border-gray-300 rounded-lg p-2 w-80 ml-32"
+                        className="border-2 border-gray-300 rounded-lg p-2 w-80"
                         onChange={(e) => {
                           setPassword(e.target.value);
                           setFieldValue("password", e.target.value);
@@ -171,19 +170,14 @@ const ShareDirectly = () => {
               </div>
             )}
 
-            <div className="mt-3">
+            <div className="mt-3 flex justify-center">
               <label>
-                <label className="text-lg text-black-500 dark:text-black-400">
-                  <span className="text-lg text-blue-900 fw-bold">
-                    Receiver
-                  </span>{" "}
-                  Email{"  "}
-                </label>
+                <label className="text-lg text-black-500 dark:text-black-400">Receiver Email</label>
                 <Field
                   type="email"
                   name="email"
                   placeholder="Receiver Email"
-                  className="border-2 border-gray-300 rounded-lg p-2 w-80 ml-2"
+                  className="border-2 border-gray-300 rounded-lg p-2 w-80"
                 />
                 <ErrorMessage
                   name="email"

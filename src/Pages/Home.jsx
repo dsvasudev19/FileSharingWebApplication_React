@@ -2,6 +2,7 @@ import React from 'react';
 import SideBar from '../Components/SideBar';
 import {FileImage, FileMusic, FileVideo2, FolderHeart, Layers, Music2} from 'lucide-react';
 import Footer from './../Components/Footer';
+import {Link} from 'react-router-dom';
 const Home = () => {
   return (
     <div className='h-full border-2 border-blue-300 rounded-md p-5 '>
@@ -12,22 +13,32 @@ const Home = () => {
         <p className='sm:text-lg md:text-xl lg:text-3xl font-semibold '><span className='text-blue-700'>Quick</span> Access</p>
       </div>
       <div className='flex flex-wrap flex-row justify-start gap-6'>
-        <div className='box-content h-12 w-12 p-4 mt-3 border-2 border-blue-400 rounded-2xl bg-blue-300'>
-          <FolderHeart size={48} strokeWidth={1} />
-        </div>
+        <Link to='/quick-access?type=Favourites'>
+          <div className='box-content h-12 w-12 p-4 mt-3 border-2 border-blue-400 rounded-2xl bg-blue-300'>
+            <FolderHeart size={48} strokeWidth={1} />
+          </div>
+        </Link>
+        <Link to='/quick-access?type=Music'>
         <div className='box-content h-12 w-12 p-4 mt-3 border-2 border-blue-400 rounded-2xl bg-blue-300'>
           <FileMusic size={48} strokeWidth={1} />
         </div>
+        </Link>
+        <Link to='/quick-access?type=Videos'>
         <div className='box-content h-12 w-12 p-4 mt-3 border-2 border-blue-400 rounded-2xl bg-blue-300'>
           <FileVideo2 size={48} strokeWidth={1} />
         </div>
+        </Link>
+        <Link to='/quick-access?type=Images'>
         <div className='box-content h-12 w-12 p-4 mt-3 border-2 border-blue-400 rounded-2xl bg-blue-300'>
           <FileImage size={48} strokeWidth={1} />
         </div>
+        </Link>
+        <Link to='/quick-access?type=Documents'>
         <div className='box-content h-12 w-12 p-4 mt-3 border-2 border-blue-400 rounded-2xl bg-blue-300'>
           <Layers size={48} strokeWidth={1} />
 
         </div>
+        </Link>
       </div>
       <div className='mt-5 justify-start text-left'>
         <p className='sm:text-lg md:text-xl lg:text-3xl font-semibold '>Recently Uploaded</p>

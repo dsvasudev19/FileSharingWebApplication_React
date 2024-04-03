@@ -3,13 +3,12 @@
 import { Button, Checkbox, Label, Modal, TextInput } from "flowbite-react";
 import { useState } from "react";
 
-function FileShareModal({isOpen,fileId,...props}) {
+function FileShareModal({isOpen, fileId, closeModal,...props}) {
   const [openModal, setOpenModal] = useState(isOpen);
   const [isPasswordEnabled,setIsPasswordEnabled] = useState(true)
-  console.log(isOpen)
   return (
     <>
-      <Modal dismissible show={openModal} onClose={() => setOpenModal(false)}>
+      <Modal dismissible show={openModal} onClose={() => {setOpenModal(false); closeModal()}}>
         <Modal.Header>Share File</Modal.Header>
         <Modal.Body>
           {/* <div>

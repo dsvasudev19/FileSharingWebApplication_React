@@ -11,6 +11,8 @@ import Files from "./Pages/Files";
 import ShareDirectly from "./Pages/ShareDirectly";
 import SharedWithYou from "./Pages/SharedWithYou";
 import AccountsPage from "./Pages/AccountsPage";
+import FolderContent from "./Pages/FolderContent";
+import QuickAccess from "./Pages/QuickAccess";
 export default function App() {
     return (
             <BrowserRouter>
@@ -25,6 +27,8 @@ export default function App() {
                     <Route path="/account" element={<AccountsPage />} /> 
                     <Route path="/share-direct" element={<ShareDirectly />} />
                     <Route path="/shares" element={<SharedWithYou />} />
+                    <Route path="/view-folder" element={<FolderContent />} />
+                    <Route path="/quick-access" element={<QuickAccess />} />
                 </Route>
                 </Routes>
             </BrowserRouter>

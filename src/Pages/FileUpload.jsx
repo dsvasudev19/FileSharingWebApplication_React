@@ -17,6 +17,7 @@ const FileUpload = () => {
   const [file, setFile] = useState(null);
   const [enablePassword, setEnablePassword] = useState(false);
   const [password, setPassword] = useState("");
+  const [fileSize,setFileSize]=useState(0);
   return (
     <div className="justify-center text-center p-3 mt-3">
       <div>
@@ -25,24 +26,30 @@ const FileUpload = () => {
       <div className="text-3xl font-bold mb-6">Upload Single File</div>
       <Formik
         initialValues={initialValues}
-        onSubmit={async (values) => {
+        onSubmit={async (values,{resetForm}) => {
           if (!file) {
             toast.error("Please select a file");
           } else if (enablePassword && !values.password) {
             toast.error("Please enter a password");
           } else {
-            console.log(values,"values")
+            
             let formData=new FormData();
             formData.append("file",file);
             formData.append("password",values.password);
             
             const toastId = toast.loading("Uploading File...");
-            setTimeout(() => {
+            try{
+              // const 
               toast.success("File Uploaded Successfully", {
                 id: toastId,
               });
-            }, 1000);
+            }catch(error){
+              console.log(error)
+            }
+              
+            
             setFile(null);
+            resetForm();
           }
         }}
       >
@@ -88,6 +95,9 @@ const FileUpload = () => {
                       setFile(e.target.files[0]);
                       console.log(e.target.files[0]);
                       setFieldValue('file', e.target.files[0])
+                      const fileSizeInBytes = e.target.files[0].size;
+                      const fileSizeInMB = fileSizeInBytes / (1024 * 1024);
+                      setFileSize(fileSizeInMB);
                     }}
                   />
                 </label>
@@ -95,7 +105,7 @@ const FileUpload = () => {
             </div>
             {file && (
               <div className="flex justify-center">
-                <div className="flex justify-center mt-6 max-w-96 border-2 border-black p-5 rounded-lg">
+                <div className="flex justify-center mt-6 max-w-fit border-2 border-black p-5 rounded-lg">
                   <div className="w-24 h-24 rounded-sm ">
                     <img
                       src="/google-docs.png"
@@ -103,11 +113,16 @@ const FileUpload = () => {
                       alt="file"
                     />
                   </div>
-                  <div className="justify-center ml-5 text-left">
+                  <div className="justify-start ml-5 text-left">
                     <a>
                       <div className="text-xl font-bold">{file?.name}</div>
-                      <div className="flex justify-center text-lg">
-                        {file?.type}/{Math.ceil(file?.size / 1024)} MB
+                      <div className="flex justify-start text-lg text-red-700">
+                        {file?.type}
+                      </div>
+                      <div className="flex justify-start text-lg">
+                        Size:{" "}{fileSize >= 1
+                          ? `${ fileSize.toFixed(2) } MB`
+                          : `${ Math.ceil(fileSize * 1024) } KB`}
                       </div>
                     </a>
                   </div>

@@ -7,11 +7,11 @@ export default function Layout() {
     return (
         <div className="align-items-center justify-items-center">
             <NavigationMenu className="sticky top-0"/>
-            <div className='flex flex-row justify-between align-center'>
-                <div id='sideBar' className='hidden md:block w-[15%] rounded-lg bg-white mt-5'>
-                    <SideBar />
+            <div className='flex flex-row '>
+                <div id='sideBar' className='w-[16%] md:w-[18%] rounded-lg bg-white mt-5 overflow-hidden'>
+                    <SideBar className="bg-white"/>
                 </div>
-                <div id='mainContent' className='w-[80%] rounded-lg xs:ml-10 ml-0'>
+                <div id='mainContent' className='w-[82%] rounded-lg ml-2'>
 
                     <Outlet />
                 </div>
