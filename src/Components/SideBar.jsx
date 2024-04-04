@@ -25,8 +25,8 @@ function SideBar() {
                     <Tooltip content="Create Folder" placement="right">
 
                         <Sidebar.Item
-                            icon={FolderPlus} className="text-left">
-                            <button onClick={() => setOpenModal(true)}><span className="hidden lg:block">Create Folder</span></button>
+                            icon={FolderPlus} className="text-left" onClick={() => setOpenModal(true)}>
+                            <button ><span className="hidden lg:block">Create Folder</span></button>
                         </Sidebar.Item>
                     </Tooltip>
                     <Tooltip content="Share File" placement="right">

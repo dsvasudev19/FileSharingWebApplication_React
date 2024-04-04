@@ -3,7 +3,7 @@ import React, {useState} from "react";
 import toast, {Toaster} from "react-hot-toast";
 import {Formik, Form, Field, ErrorMessage} from "formik";
 import * as Yup from "yup";
-
+import {axiosInstance} from './../axiosInstance'
 const fileUploadValidationSchema = Yup.object({
   file: Yup.mixed().required("File is Required"),
 });
@@ -27,6 +27,7 @@ const FileUpload = () => {
       <Formik
         initialValues={initialValues}
         onSubmit={async (values,{resetForm}) => {
+          const toastId = toast.loading("Uploading File...");
           if (!file) {
             toast.error("Please select a file");
           } else if (enablePassword && !values.password) {
@@ -37,14 +38,19 @@ const FileUpload = () => {
             formData.append("file",file);
             formData.append("password",values.password);
             
-            const toastId = toast.loading("Uploading File...");
             try{
-              // const 
-              toast.success("File Uploaded Successfully", {
+              const response=await axiosInstance.post("/api/file/",formData);
+              console.log(response);
+              if(response.status===201){
+                toast.success("File Uploaded Successfully", {
+                  id: toastId,
+                });
+              }
+            }catch(error){
+              console.log(error);
+              toast.error("Error occured while uploading File", {
                 id: toastId,
               });
-            }catch(error){
-              console.log(error)
             }
               
             

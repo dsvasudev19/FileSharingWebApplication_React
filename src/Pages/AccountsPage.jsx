@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import toast, { Toaster } from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext";
+import {axiosInstance} from "../axiosInstance";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Email is Required"),
@@ -18,14 +19,14 @@ const AccountsPage = () => {
     const [formLoading,setFormLoading]=useState(false);
     const {user,loading,logout} = useAuth();
     const navigate=useNavigate();
-  const initialValues = {
-    first_name: "Darse Shikari",
-    last_name: "Vasudev",
-    dob: "2001-10-19",
-    location: "Hyderabad",
-    email: "vasudevds1729@gmail.com",
-    username: "vasudevds",
-  };
+  const [initialValues,setInitialValues] = useState({
+    first_name: "",
+    last_name: "",
+    dob: "",
+    location: "",
+    email: "",
+    username: "",
+  });
 
   useEffect(()=>{
     if (!user && !loading){
@@ -33,6 +34,13 @@ const AccountsPage = () => {
     }
   },[user,loading])
 
+  useEffect(()=>{
+    if(user && !loading){
+      setInitialValues({...user})
+    }
+  },[user])
+
+ 
   return (
     <div className="block lg:flex justify-center gap-4 mt-5">
       <Toaster position="top-right" reverseOrder={false} />
@@ -86,13 +94,20 @@ const AccountsPage = () => {
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
-          onSubmit={(values, { resetForm }) => {
+          enableReinitialize={true}
+          onSubmit={async (values, { resetForm }) => {
+            const updateToast=toast.loading("Saving changes into your Account");
             console.log(values, "values");
             setFormLoading(true);
-            setTimeout(() => {
-              setFormLoading(false);
-            }, 1000);
-            toast.success("Account Updated Successfully");
+            try{
+              const response=await axiosInstance.put("/api/users/"+user?.id,values)
+               
+            }catch(error){
+              console.log(error);
+              toast.error("Error occured while updating the Account details",{
+                id:updateToast
+              })
+            }
           }}
         >
           {({ setFieldValue }) => (

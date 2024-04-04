@@ -11,7 +11,7 @@ const Home = () => {
     if (!user && !loading){
       navigate('/login')
     }
-  })
+  },[user,loading])
   return (
     <div className='border-2 border-blue-500 rounded-md p-5 mt-5'>
       <div className='justify-center'>

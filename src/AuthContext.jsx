@@ -19,13 +19,13 @@ export const AuthProvider= ({children}) => {
             }
         } catch (error) {
             console.log(error)
-            throw new Error(error);
+            throw new Error(error.response.data.message);
         }
     }
 
     const logout = async () => {
         try {
-            const response=await axiosInstance.get("/api/auth/logout");
+            const response=await axiosInstance.post("/api/auth/logout");
             if (response.status === 200) {
                 setIsAuthenticated(false);
                 setUser(null);
@@ -36,6 +36,7 @@ export const AuthProvider= ({children}) => {
             setUser(null)
             throw new Error(error);
         }
+        setLoading(false);
     }
     const getUserByToken = async () => {
         try {

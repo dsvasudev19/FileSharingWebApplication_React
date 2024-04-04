@@ -2,16 +2,50 @@
 
 import { Button, Checkbox, Label, Modal, TextInput } from "flowbite-react";
 import {FolderPlus} from "lucide-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import toast,{Toaster} from 'react-hot-toast'
+import {axiosInstance} from './../axiosInstance'
+
 
 function CreateFolderModal({ isOpen, closeModal }) {
   const [openModal, setOpenModal] = useState(isOpen);
   const [passwordEnabled, setPasswordEnabled] = useState(false);
   const folderNameInputRef = useRef(null);
-
-
+  const [name,setName]=useState("");
+  const [password,setPassword]=useState("")
+  
+  const handleSubmit=async()=>{
+    const createToast=toast.loading("Creating folder for you");
+    if (!name || (passwordEnabled && !password)){
+    toast.error("Folder name or Password is missing",{
+      id: createToast
+    })
+   }
+   else{
+    try {
+      const response=await axiosInstance.post("/api/folder",{name,password});
+      if(response.status===201){
+        console.log("success");
+        toast.success("Successfully Created the Folder",{
+          id: createToast
+        })
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Error while creating the Folder",{
+        id: createToast
+      })
+    }finally{
+      setOpenModal(false);
+      closeModal();
+    }
+   }
+   
+  }
+  
   return (
     <>
+      <Toaster position="top-right" reverseOrder={false} />
       <Modal
         show={openModal}
         size="md"
@@ -38,6 +72,9 @@ function CreateFolderModal({ isOpen, closeModal }) {
                 placeholder="Ex:MyFiles"
                 required
                 ref={folderNameInputRef}
+                onChange={(e)=>{
+                  setName(e.target.value)
+                }}
               />
             </div>
             <div className="flex justify-between">
@@ -57,11 +94,14 @@ function CreateFolderModal({ isOpen, closeModal }) {
                 <div className="mb-2 block">
                   <Label htmlFor="password" value="Your password" />
                 </div>
-                <TextInput id="password" type="password" required />
+                <TextInput id="password" type="password" name="password" required onChange={(e)=>{
+                  console.log(e.target.value)
+                  setPassword(e.target.value)
+                }}/>
               </div>
             )}
             <div className="w-full">
-              <Button>Create</Button>
+              <Button type="submit" onClick={handleSubmit}>Create</Button>
             </div>
           </div>
         </Modal.Body>

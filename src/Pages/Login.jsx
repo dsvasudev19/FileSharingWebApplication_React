@@ -14,6 +14,7 @@ const validationSchema = Yup.object({
 const Login = ({className}) => {
   const [loading,setLoading]=useState(false);
   const {login} = useAuth();
+  const [status,setStatus] = useState("");
   const navigate=useNavigate();
   const handleSubmit = async (values) => {
     try {
@@ -21,6 +22,7 @@ const Login = ({className}) => {
       await login(values);
     } catch (error) {
       console.log(error);
+      setStatus(error.message)
     }
   };
   return (
@@ -33,6 +35,9 @@ const Login = ({className}) => {
         />
         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
           Sign in to your account
+        </h2>
+        <h2 className="mt-10 text-center text-xl font-bold leading-9 tracking-tight text-red-700">
+          {status!==""?status:""}
         </h2>
       </div>
 
