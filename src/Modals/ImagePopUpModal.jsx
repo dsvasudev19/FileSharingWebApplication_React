@@ -8,28 +8,19 @@ function Component({viewModal, closeViewModal, ...props}) {
     const [openModal, setOpenModal] = useState(viewModal);
     const [modalPlacement, setModalPlacement] = useState('center')
     const downloadFile = () => {
-        fetch(path)
+        fetch(props.path)
             .then(response => response.blob())
             .then(blob => {
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
-                a.href = url;
-                a.download = original_name;
+                a.href = props.path;
+                a.download = props.name;
                 a.click();
                 window.URL.revokeObjectURL(url);
             })
             .catch(error => console.error('Error downloading file:', error));
     }
-    const sendData=async ()=>{
-        try {
-            const response = await axiosInstance.get("/api/admin/subscription", values.email)
-            if (response.status === 200) {
-                console.log(response.data);
-            }
-        } catch (error) {
-            console.log(error)
-        }
-    }
+    
     return (
         <>
             <Modal
