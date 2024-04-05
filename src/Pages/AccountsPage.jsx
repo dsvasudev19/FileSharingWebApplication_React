@@ -100,8 +100,13 @@ const AccountsPage = () => {
             console.log(values, "values");
             setFormLoading(true);
             try{
-              const response=await axiosInstance.put("/api/users/"+user?.id,values)
-               
+              const response=await axiosInstance.put("/api/user/"+user?.id,values)
+               console.log(response)
+               if(response.status===200){
+                toast.success(response.data.message,{
+                  id:updateToast
+                })
+               }
             }catch(error){
               console.log(error);
               toast.error("Error occured while updating the Account details",{

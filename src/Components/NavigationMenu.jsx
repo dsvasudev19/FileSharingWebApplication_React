@@ -30,13 +30,6 @@ function NavigationMenu() {
                 <Navbar.Link href="#">Services</Navbar.Link>
                 <Navbar.Link href="#">Pricing</Navbar.Link>
                 <Navbar.Link href="#">Contact</Navbar.Link>
-                <Navbar.Link href="/file-upload" className="block md:hidden">File Upload</Navbar.Link>
-                <Navbar.Link href="/folder-create" className="block md:hidden">Create Folder</Navbar.Link>
-                <Navbar.Link href="/file-preview" className="block md:hidden">Shared With You</Navbar.Link>
-                <Navbar.Link href="#" className="block md:hidden">Files</Navbar.Link>
-                <Navbar.Link href="#" className="block md:hidden">Settings</Navbar.Link>
-                <Navbar.Link href="/account" className="block md:hidden">Account</Navbar.Link>
-                
             </Navbar.Collapse>
         </Navbar>
     );

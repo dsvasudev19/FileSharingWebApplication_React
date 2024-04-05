@@ -8,19 +8,30 @@ const File = (props) => {
   const closeModal = () => {
     setOpen(false);
   }
+  console.log(props)
   return (
     <div class="max-w-xs bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mt-3">
-      <a href="#">
-        <img
-          class="rounded-t-lg"
-          src="https://img.freepik.com/free-photo/painting-mountain-lake-with-mountain-background_188544-9126.jpg?size=626&ext=jpg&ga=GA1.1.2113030492.1711929600&semt=sph"
-          alt=""
-        />
-      </a>
+    {
+        props.type && props.type.startsWith("image") ? <a href="#">
+          <img
+            class="rounded-t-lg  max-h-48 w-64 object-fit"
+            src={props?.path}
+            alt=""
+          />
+        </a> : <a href="#">
+          <img
+            class="rounded-t-lg max-h-48 w-64 object-fit"
+            src="/Placeholder-image.png"
+            alt=""
+          />
+        </a>
+    }
+      
+      
       <div class="p-2 flex justify-between">
         <a href="#">
           <h5 class="mb-2 text-lg font-bold tracking-tight text-gray-900 dark:text-white">
-            Image
+            {props.name}
           </h5>
         </a>
         <a className="hover:cursor-pointer mt-1">
