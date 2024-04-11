@@ -8,6 +8,7 @@ import {axiosInstance} from '../../axiosInstance';
 import toast, {Toaster} from 'react-hot-toast';
 import File from './../Components/File'
 const Home = () => {
+  console.log(import.meta.env.VITE_GOOGLE_CLIENT_API)
   const {user, loading} = useAuth();
   const navigate = useNavigate();
   const [files, setFiles] = useState([])

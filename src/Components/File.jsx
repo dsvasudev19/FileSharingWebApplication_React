@@ -2,17 +2,54 @@ import React, {useState} from "react";
 import {Dropdown} from "flowbite-react";
 import {EllipsisVertical} from "lucide-react";
 import FileShareModal from "../Modals/FileShareModal";
-import ImagePopUpModal from './../Modals/ImagePopUpModal'
+import ImagePopUpModal from './../Modals/ImagePopUpModal';
+import { axiosInstance } from "../../axiosInstance";
+import toast,{Toaster} from "react-hot-toast";
+
 const File = (props) => {
   const [open, setOpen] = useState(false);
   const [viewModal,setViewModal]=useState(false);
   const [path,setPath] = useState("");
+
   const closeViewModal=()=>{
     setViewModal(false);
   }
   const closeModal = () => {
     setOpen(false);
   }
+
+  const deleteFile = async (fileRef) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const deleteToast = toast.loading("Deleting File for you")
+        try {
+          const response = await axiosInstance.delete("/api/file/" + fileRef);
+          console.log(response);
+          if (response.status === 200) {
+            toast.success("File deleted successfully", {
+              id: deleteToast
+            });
+            props.getFiles();
+          }
+        } catch (error) {
+          console.log(error);
+          toast.error("Error deleting the file", {
+            id: deleteToast
+          })
+        }
+      }
+    });
+    
+  }
+
   return (
     <div class="max-w-xs bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mt-3">
       {
@@ -32,7 +69,7 @@ const File = (props) => {
         </a>
       }
 
-
+     
       <div class="p-2 flex justify-between">
         <a href="#">
           <h5 class="mb-2 text-lg font-bold tracking-tight text-gray-900 dark:text-white">
@@ -50,7 +87,9 @@ const File = (props) => {
             )}
           >
             <Dropdown.Item>Edit</Dropdown.Item>
-            <Dropdown.Item>Delete</Dropdown.Item>
+            <Dropdown.Item onClick={() => {
+              deleteFile(props.refe);
+            }}>Delete</Dropdown.Item>
             <Dropdown.Item>Download</Dropdown.Item>
             <Dropdown.Item onClick={() => {
               setOpen(true);
@@ -63,7 +102,9 @@ const File = (props) => {
       </div>
       {open && <FileShareModal isOpen={open} fileId={"FILE123"} closeModal={closeModal} />}
       {viewModal && <ImagePopUpModal viewModal={viewModal} closeViewModal={closeViewModal} {...props}/>}
+      <Toaster position='top-right' reverseOrder={true} />
     </div>
+    
   );
 };
 
