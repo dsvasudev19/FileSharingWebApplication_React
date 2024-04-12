@@ -12,7 +12,8 @@ const Files = (props) => {
     const navigate=useNavigate();
     const [folders,setFolders]=useState([]);
     const [files,setFiles]=useState([]);
-    const [check,setCheck] =useState(true)
+    const [check,setCheck] =useState(true);
+    const [fileRef,setFileRef]=useState("");
     const getAllRootFiles = async () => {
         try {
             const response = await axiosInstance.get("/api/file/by/folderRef/root");
@@ -39,7 +40,25 @@ const Files = (props) => {
             toast.error("Error occured while fetching folders")
         }
     }
-
+   const deleteFile=async ()=>{
+    const deleteToast=toast.loading("Deleting File for you")
+    try {
+        const response=await axiosInstance.delete("/api/file/"+fileRef);
+        console.log(response);
+        if(response.status===200){
+            
+            files.filter((file)=>file.ref!=fileRef)
+            toast.success("File deleted successfully", {
+                id: deleteToast
+            });
+        }
+    } catch (error) {
+        console.log(error);
+        toast.error("Error deleting the file",{
+            id: deleteToast
+        })
+    }
+   }
 
    useEffect(()=>{
     if(user && !loading){
@@ -57,7 +76,7 @@ const Files = (props) => {
     return (
         <>
             {
-                !check?File(
+                !loading?(
                     <div className='mt-5 border-2 border-slate-600 rounded-lg'>
                         <Toaster position='top-right' reverseOrder={true} />
                         <h1 className='sm:text-lg md:text-xl lg:text-2xl xl:text-3xl m-5 '><span className='text-blue-700 font-bold'>Folder's</span> and <span className='text-blue-700 font-bold'>Files</span> Created By <span className='text-green-700 font-semibold'>You</span>❤️</h1>
@@ -66,7 +85,7 @@ const Files = (props) => {
 
                             {
                                 folders?.map((folder, index) => (
-                                    <Folder name={folder.name} id={folder.id} key={index} />
+                                    <Folder name={folder.name} id={folder.id} key={index} getFolders={getAllFolders} refe={folder.ref} />
                                 ))
                             }
                         </div>
@@ -74,7 +93,7 @@ const Files = (props) => {
                         <div className='grid grid-flow-row grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pr-3 pl-3 pb-3'>
                             {
                                 files?.map((file, index) => (
-                                    <File name={file.original_name} id={file.id} refe={file.ref} key={index} type={file.file_type} path={file.path} />
+                                    <File name={file.original_name} id={file.id} refe={file.ref} key={index} type={file.file_type} path={file.path} getFiles={getAllRootFiles}/>
                                 ))
 
                             }

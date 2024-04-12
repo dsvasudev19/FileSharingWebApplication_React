@@ -50,13 +50,6 @@ function SideBar() {
                             </span>
                         </Sidebar.Item>
                     </Tooltip>
-                    <Tooltip content="Settings" placement="right">
-                        <Sidebar.Item href="#" icon={Settings} className="text-left">
-                            <span className="hidden lg:block">
-                                Settings
-                            </span>
-                        </Sidebar.Item>
-                    </Tooltip>
                     <Tooltip content="Account" placement="right">
                         <Sidebar.Item href="/account" icon={CircleUserRound} className="text-left">
                             <span className="hidden lg:block">
