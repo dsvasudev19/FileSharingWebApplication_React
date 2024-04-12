@@ -2,7 +2,9 @@ import React, {useState} from "react";
 import {Formik, Field, Form, ErrorMessage} from "formik";
 import * as Yup from "yup";
 import {useAuth} from "./../AuthContext";
-import {useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom"; 
+import {useGoogleLogin} from '@react-oauth/google';
+import {jwtDecode} from "jwt-decode";
 
 const validationSchema = Yup.object({
   email: Yup.string()
@@ -10,6 +12,7 @@ const validationSchema = Yup.object({
     .required("Email is Required"),
   password: Yup.string().required("Password is Required"),
 });
+
 
 const Login = ({className}) => {
   const [loading,setLoading]=useState(false);
@@ -25,6 +28,12 @@ const Login = ({className}) => {
       setStatus(error.message)
     }
   };
+  const authLogin = useGoogleLogin({
+    onSuccess: (codeResponse) => {
+      const token = codeResponse.access_token;
+    },
+    onFailure: error => console.log(error)
+  });
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -37,8 +46,11 @@ const Login = ({className}) => {
           Sign in to your account
         </h2>
         <h2 className="mt-10 text-center text-xl font-bold leading-9 tracking-tight text-red-700">
-          {status!==""?status:""}
+          {status !== "" ? status : ""}
         </h2>
+        <button className="text-xl font-semibold border-2 border-blue-300 rounded-md p-2 m-3 bg-blue-300 hover:bg-white">Sign in with Google 🚀</button>
+        <br></br>
+        <span className="text-xl">or</span>
       </div>
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
