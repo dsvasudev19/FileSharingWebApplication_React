@@ -18,7 +18,6 @@ const Home = () => {
       console.log(response);
       if (response.status === 200) {
         setFiles(response.data.data)
-        toast.success("files fetched")
       }
     } catch (error) {
       console.log(error);

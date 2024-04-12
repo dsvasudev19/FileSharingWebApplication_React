@@ -1,12 +1,15 @@
-import { Zap } from "lucide-react";
-import React, { useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import {Zap} from "lucide-react";
+import React, {useState} from "react";
+import toast, {Toaster} from "react-hot-toast";
+import {Formik, Form, Field, ErrorMessage} from "formik";
 import * as Yup from "yup";
+import {axiosInstance} from "../axiosInstance";
+import {useAuth} from './../AuthContext'
+
 
 const fileUploadValidationSchema = Yup.object({
-    email: Yup.string()
-        .required("Email is Required"),
+  email: Yup.string()
+    .required("Email is Required"),
 });
 
 
@@ -14,7 +17,7 @@ const ShareDirectly = () => {
   const [file, setFile] = useState(null);
   const [enablePassword, setEnablePassword] = useState(false);
   const [password, setPassword] = useState("");
-
+  const {user,loading}=useAuth(); 
   const [initialValues, setInitialValues] = useState({
     file: "",
     password: "",
@@ -32,30 +35,41 @@ const ShareDirectly = () => {
       <Formik
         initialValues={initialValues}
         validationSchema={fileUploadValidationSchema}
-        onSubmit={async (values,{resetForm}) => {
+        onSubmit={async (values, {resetForm}) => {
+          const shareToast = toast.loading("Sharing file")
           if (!file) {
-            toast.error("Please select a file");
+            toast.error("Please select a file", {
+              id: shareToast
+            });
           } else if (enablePassword && !values.password) {
-            toast.error("Please enter a password");
+            toast.error("Please enter a password", {
+              id: shareToast
+            });
           } else {
             console.log(values, "values");
             let formData = new FormData();
             formData.append("file", file);
             formData.append("password", values.password);
             formData.append("email", values.email);
-
-            const toastId = toast.loading("Uploading File...");
-            setTimeout(() => {
-              toast.success("File Uploaded Successfully", {
-                id: toastId,
+            try {
+              const response = await axiosInstance.post("/api/share/", formData);
+              console.log(response);
+              toast.success("Successfully shared the file with your friend",{
+                id: shareToast
+              })
+            } catch (error) {
+              console.log(error);
+              toast.error("Error occured while uploading File", {
+                id: shareToast
               });
-            }, 1000);
+            }
+            
             setFile(null);
             resetForm();
           }
         }}
       >
-        {({ setFieldValue }) => (
+        {({setFieldValue}) => (
           <Form>
             <div className="flex justify-center">
               <div className="flex items-center justify-center w-3/4">
@@ -108,7 +122,7 @@ const ShareDirectly = () => {
                 <div className="flex justify-center mt-6 max-w-96 border-2 border-black p-5 rounded-lg">
                   <div className="w-16 h-16 rounded-sm ">
                     <img
-                      src="./../../public/google-docs.png"
+                      src="/google-docs.png"
                       className="w-full h-full object-cover"
                       alt="file"
                     />
@@ -193,7 +207,7 @@ const ShareDirectly = () => {
                 type="submit"
               >
                 <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
-                  Upload
+                  Share File
                 </span>
               </button>
             </div>
