@@ -1,34 +1,61 @@
 "use client";
 
-import { Button, Checkbox, Label, Modal, TextInput } from "flowbite-react";
-import { useState } from "react";
+import {Button, Checkbox, Label, Modal, TextInput} from "flowbite-react";
+import {useState} from "react";
+import {axiosInstance} from "../../axiosInstance";
+import {Formik, Form, Field, ErrorMessage} from 'formik';
+import toast, {Toaster} from 'react-hot-toast'
 
-function FileShareModal({isOpen, fileId, closeModal,...props}) {
+function FileShareModal({isOpen, fileId, closeModal, fileName, fileRef, ...props}) {
   const [openModal, setOpenModal] = useState(isOpen);
-  const [isPasswordEnabled,setIsPasswordEnabled] = useState(true)
+  const [isPasswordEnabled, setIsPasswordEnabled] = useState(true)
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const share = async () => {
+    try {
+      let values = {
+        email: email,
+        fileRef:fileRef
+      }
+      if (password) {
+        values = {password, ...values}
+      }
+      if(email){
+        if(isPasswordEnabled && !password){
+          toast.error("Please Fill the Password or else Uncheck the Enable Password")
+        }
+        else{
+          const response = await axiosInstance.post("/api/share/uploaded/user", values);
+          console.log(response)
+          if (response.status === 200) {
+            toast.success("File Shared Successfully")
+          }
+        }
+      }else{
+        toast.error("Receiver Email shoulnot be left empty")
+      }
+    } catch (error) {
+      console.log(error)
+      toast.error("Error while sharing the file")
+    }
+  }
+
+
+
   return (
     <>
+      <Toaster position={"top-right"} reverseOrder={true} />
       <Modal dismissible show={openModal} onClose={() => {setOpenModal(false); closeModal()}}>
         <Modal.Header>Share File</Modal.Header>
         <Modal.Body>
-          {/* <div>
-            <div className="mb-2 block">
-              <Label htmlFor="fileId" value="FILE_ID" />
-              <TextInput
-                id="fileId"
-                placeholder="File Id you want to Share"
-                value={fileId}
-                required
-              />
-            </div>
-          </div> */}
           <div>
             <div className="mb-2 block">
               <Label htmlFor="fileName" value="FILE" />
               <TextInput
                 id="fileName"
                 placeholder="File Id you want to Share"
-                value={props?.fileName||"File Name"}
+                value={fileName || "File Name"}
                 required
                 contentEditable={false}
               />
@@ -40,7 +67,7 @@ function FileShareModal({isOpen, fileId, closeModal,...props}) {
               <div className="mb-2 block">
                 <Label htmlFor="email" value="Receiver email" />
               </div>
-              <TextInput id="email" placeholder="name@company.com" required />
+              <TextInput id="email" placeholder="name@company.com" onChange={(e)=>{setEmail((prev)=>{return e.target.value})}} />
             </div>
           </div>
           <div className="mt-2">
@@ -61,13 +88,13 @@ function FileShareModal({isOpen, fileId, closeModal,...props}) {
                 <div className="mb-2 block">
                   <Label htmlFor="password" value="Your password" />
                 </div>
-                <TextInput id="password" type="password" required />
+                <TextInput id="password" type="password" onChange={(e)=>{setPassword((prev)=>{return e.target.value})}} />
               </div>
             </div>
           )}
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={() => setOpenModal(false)}>Share</Button>
+          <Button onClick={() => {share(),setOpenModal(false)}}>Share</Button>
         </Modal.Footer>
       </Modal>
     </>

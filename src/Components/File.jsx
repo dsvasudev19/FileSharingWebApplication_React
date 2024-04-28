@@ -10,6 +10,8 @@ const File = (props) => {
   const [open, setOpen] = useState(false);
   const [viewModal,setViewModal]=useState(false);
   const [path,setPath] = useState("");
+  const [fileName,setFileName]=useState("");
+  const [fileRef,setFileRef]=useState("");
 
   const closeViewModal=()=>{
     setViewModal(false);
@@ -49,6 +51,7 @@ const File = (props) => {
     });
     
   }
+
 
   return (
     <div class="max-w-xs bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mt-3">
@@ -93,15 +96,16 @@ const File = (props) => {
             <Dropdown.Item>Download</Dropdown.Item>
             <Dropdown.Item onClick={() => {
               setOpen(true);
-              console.log("Share button clicked");
+              setFileName((prev) => {return props.name});
+              setFileRef((prev) => {return props.refe})
             }}>
               Share
             </Dropdown.Item>
           </Dropdown>
         </a>
       </div>
-      {open && <FileShareModal isOpen={open} fileId={"FILE123"} closeModal={closeModal} />}
-      {viewModal && <ImagePopUpModal viewModal={viewModal} closeViewModal={closeViewModal} {...props}/>}
+      {open && <FileShareModal isOpen={open} fileId={"FILE123"} closeModal={closeModal} fileName={fileName} fileRef={fileRef} />}
+      {viewModal && <ImagePopUpModal viewModal={viewModal} closeViewModal={closeViewModal}  {...props}/>}
       <Toaster position='top-right' reverseOrder={true} />
     </div>
     

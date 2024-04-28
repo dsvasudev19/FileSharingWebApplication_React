@@ -75,7 +75,7 @@ const Login = ({className}) => {
                 <ErrorMessage
                   name="email"
                   component="div"
-                  className="text-red-500"
+                  className="text-red-500 text-left"
                 />
               </div>
 
@@ -93,7 +93,7 @@ const Login = ({className}) => {
                 <ErrorMessage
                   name="password"
                   component="div"
-                  className="text-red-500"
+                  className="text-red-500 text-left"
                 />
               </div>
 
