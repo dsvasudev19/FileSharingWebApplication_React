@@ -52,7 +52,7 @@ const ShareDirectly = () => {
             formData.append("password", values.password);
             formData.append("email", values.email);
             try {
-              const response = await axiosInstance.post("/api/share/", formData);
+              const response = await axiosInstance.post("/api/share/withUser", formData);
               console.log(response);
               toast.success("Successfully shared the file with your friend",{
                 id: shareToast
