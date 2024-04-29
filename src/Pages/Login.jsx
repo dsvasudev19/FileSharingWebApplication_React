@@ -1,10 +1,12 @@
-import React, {useState} from "react";
-import {Formik, Field, Form, ErrorMessage} from "formik";
+import React, { useState } from "react";
+import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import {useAuth} from "./../AuthContext";
-import {useNavigate} from "react-router-dom"; 
-import {useGoogleLogin} from '@react-oauth/google';
-import {jwtDecode} from "jwt-decode";
+import { useAuth } from "./../AuthContext";
+import { useNavigate } from "react-router-dom";
+import { useGoogleLogin } from '@react-oauth/google';
+import { jwtDecode } from "jwt-decode";
+import { GoogleLogin } from '@react-oauth/google';
+
 
 const validationSchema = Yup.object({
   email: Yup.string()
@@ -14,11 +16,11 @@ const validationSchema = Yup.object({
 });
 
 
-const Login = ({className}) => {
-  const [loading,setLoading]=useState(false);
-  const {login} = useAuth();
-  const [status,setStatus] = useState("");
-  const navigate=useNavigate();
+const Login = ({ className }) => {
+  const [loading, setLoading] = useState(false);
+  const { login,user,setUser } = useAuth();
+  const [status, setStatus] = useState("");
+  const navigate = useNavigate();
   const handleSubmit = async (values) => {
     try {
       console.log("values", values)
@@ -28,12 +30,7 @@ const Login = ({className}) => {
       setStatus(error.message)
     }
   };
-  const authLogin = useGoogleLogin({
-    onSuccess: (codeResponse) => {
-      const token = codeResponse.access_token;
-    },
-    onFailure: error => console.log(error)
-  });
+
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -48,18 +45,29 @@ const Login = ({className}) => {
         <h2 className="mt-10 text-center text-xl font-bold leading-9 tracking-tight text-red-700">
           {status !== "" ? status : ""}
         </h2>
-        <button className="text-xl font-semibold border-2 border-blue-300 rounded-md p-2 m-3 bg-blue-300 hover:bg-white">Sign in with Google 🚀</button>
+        <button className="text-xl font-semibold border-blue-300 rounded-md bg-blue-300 hover:bg-white"><GoogleLogin
+          onSuccess={credentialResponse => {
+            console.log(credentialResponse);
+            console.log(jwtDecode(credentialResponse.credential));
+            const decoded=jwtDecode(credentialResponse.credential)
+            console.log(decoded)
+          }}
+          onError={() => {
+            console.log('Login Failed');
+          }}
+        /></button>
+
         <br></br>
         <span className="text-xl">or</span>
       </div>
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
         <Formik
-          initialValues={{email: "", password: ""}}
+          initialValues={{ email: "", password: "" }}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          {({setFieldValue}) => (
+          {({ setFieldValue }) => (
             <Form className="space-y-6">
               <div className="relative">
                 <Field
@@ -102,7 +110,7 @@ const Login = ({className}) => {
                   type="submit"
                   className="flex w-full justify-center rounded-md bg-blue-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                 >
-                  {!loading ? "Login":"Please Wait"}
+                  {!loading ? "Login" : "Please Wait"}
                 </button>
               </div>
             </Form>
