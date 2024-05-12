@@ -3,22 +3,25 @@
 
 import {Button, Modal, Select} from "flowbite-react";
 import {useState} from "react";
+import { axiosInstance } from "../../axiosInstance";
+import fileDownload from "js-file-download";
 
 function Component({viewModal, closeViewModal, ...props}) {
+    console.log(props)
     const [openModal, setOpenModal] = useState(viewModal);
     const [modalPlacement, setModalPlacement] = useState('center')
-    const downloadFile = () => {
-        fetch(props.path)
-            .then(response => response.blob())
-            .then(blob => {
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = props.path;
-                a.download = props.name;
-                a.click();
-                window.URL.revokeObjectURL(url);
-            })
-            .catch(error => console.error('Error downloading file:', error));
+    const downloadFile = async() => {
+        try {
+            const response=await axiosInstance.get("/api/share/download/"+props.id,{
+                responseType: 'blob',
+            });
+            const blob = new Blob([response.data], {type: 'application/octet-stream'});
+            fileDownload(blob,props.name);
+            // fileDownload(new Blob(response.data))
+            console.log(response)
+        } catch (error) {
+            console.log(error)
+        }
     }
     
     return (
@@ -36,7 +39,7 @@ function Component({viewModal, closeViewModal, ...props}) {
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
-                    <a href={props.path} download={`"${props.name}"`}><Button>Download</Button></a>
+                    <a onClick={()=>{downloadFile()}}><Button>Download</Button></a>
                 </Modal.Footer>
             </Modal>
         </>
