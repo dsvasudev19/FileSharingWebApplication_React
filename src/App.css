@@ -1,15 +1,11 @@
-/* #root {
+#root {
   max-width: 1300px;
   margin: 0 auto;
-  /* padding: 2rem; */
   text-align: center;
-  /* max-height: 100vh;
-  overflow: scroll; */
   scroll-behavior: smooth;
-  /* max-height: 120vh; */
   overflow: hidden;
 
-} */
+}
 #root::-webkit-scrollbar {
   display: none;
 }
